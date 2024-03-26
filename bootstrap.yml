@@ -1,0 +1,6 @@
+---
+- hosts: ovh-vps
+  become: yes
+  remote_user: debian
+  roles:
+    - ssh

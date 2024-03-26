@@ -1,0 +1,2 @@
+[host]
+ovh-vps ansible_host=54.37.51.156

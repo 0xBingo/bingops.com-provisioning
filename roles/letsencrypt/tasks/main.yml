@@ -1,0 +1,27 @@
+---
+
+- name: Install certbot with nginx plugin
+  apt:
+    name:
+      - certbot
+      - python3-certbot-nginx
+    state: present
+    update_cache: yes
+
+- name: Create /opt/letsencrypt
+  file:
+    path: /opt/letsencrypt
+    state: directory
+    owner: root
+    mode: "0755"
+
+- name: Deploy renew script
+  template:
+    src: sslcert-renew.sh.j2
+    dest: "/opt/letsencrypt/sslcert-renew.sh"
+    mode: '0750'
+
+- name: Create SSL certificate
+  command: "bash /opt/letsencrypt/sslcert-renew.sh.j2"
+  ignore_errors: true
+

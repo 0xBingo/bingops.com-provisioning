@@ -1,0 +1,36 @@
+---
+
+- name: Install certbot with nginx plugin
+  apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+    update_cache: yes
+
+- name: Clone React app from GitHub
+  git:
+    repo: "{{ react_app_repo_url }}"
+    dest: "{{ react_app_clone_path }}"
+    version: "{{ react_app_branch }}"
+    clone: yes
+    update: yes
+
+- name: Install nvm
+  shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
+
+- name: Run build
+  shell: |
+    source $HOME/.nvm/nvm.sh
+    nvm install v18.19.0
+    npm install
+    npm run build
+  args:
+    chdir: "{{ react_app_clone_path }}"
+    executable: /bin/bash
+
+- name: Copy Build to Nginx directory
+  copy:
+    src: "{{ react_app_clone_path }}/dist/"
+    dest: "/var/www/html/"
+    remote_src: true

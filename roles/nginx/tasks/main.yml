@@ -1,0 +1,15 @@
+---
+
+- name: Install certbot with nginx plugin
+  apt:
+    name:
+      - nginx
+    state: present
+    update_cache: yes
+
+- name: Enable default Nginx reverse proxy
+  template:
+    src: default.conf.j2
+    dest: "/etc/nginx/sites-enabled/default"
+    mode: "0644"
+  notify: reload nginx
