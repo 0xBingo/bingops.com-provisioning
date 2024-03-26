@@ -1,0 +1,9 @@
+---
+- hosts: ovh-vps
+  become: yes
+  remote_user: "{{ new_admin_user }}"
+  roles:
+    - ssh
+    - letsencrypt
+    - nginx
+    - portfolio
