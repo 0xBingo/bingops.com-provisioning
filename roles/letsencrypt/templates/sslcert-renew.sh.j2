@@ -1,0 +1,1 @@
+certbot --preferred-challenges http-01 --rsa-key-size 4096 --nginx --non-interactive --agree-tos -m admin@{{ domain }} -d {{ domain }}
