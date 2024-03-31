@@ -1,6 +1,6 @@
 # React Portfolio Deployment for bingops.com
 
-This Ansible project automates the deployment of a React-based portfolio website on `bingops.com`. It configures the server with Nginx, sets up SSL certificates using Let's Encrypt, and deploys the React application. Additionally, it ensures SSH access is properly configured for secure administration.
+This Ansible project automates the deployment of a React-based portfolio website on [bingops.com](https://www.bingops.com), made by [Oslo418](https://github.com/Oslonline/) opensource at [bingo-portfolio](https://github.com/Oslonline/bingo-portfolio) . It configures the server with Nginx, sets up SSL certificates using Let's Encrypt, and deploys the React application. Additionally, it ensures SSH access is properly configured for secure administration.
 
 ## Project Structure
 
@@ -40,3 +40,10 @@ ansible-playbook -i inventories/main/hosts playbook.yml
 - **Nginx**: Configures Nginx to serve the React app and handle HTTPS.
 - **Portfolio**: Clones the React app from a Git repository and builds it.
 - **SSH**: Hardens SSH access for improved security.
+
+## Credits
+
+Thanks to **Oslo418**, here are its social links :
+- His website : [oslo418.com](https://www.oslo418.com/)
+- Github : [Oslonline](https://github.com/Oslonline)
+- Twitter : [Oslo418](https://twitter.com/Oslo418)
