@@ -34,3 +34,12 @@
     src: "{{ react_app_clone_path }}/dist/"
     dest: "/var/www/html/"
     remote_src: true
+
+- name: Deploy robots.txt
+  template:
+    src: "robots.txt.j2"
+    dest: "/var/www/html/robots.txt"
+    owner: "{{ new_admin_user }}"
+    group: "{{ new_admin_user }}"
+    mode: "0644"
+  notify: Restart SSH
