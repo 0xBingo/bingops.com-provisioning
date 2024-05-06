@@ -15,6 +15,16 @@
     version: "{{ react_app_branch }}"
     clone: yes
     update: yes
+    force: yes
+
+- name: "Deploy .env"
+  template:
+    src: ".env.j2"
+    dest: "{{ react_app_clone_path }}/.env"
+    owner: "{{ new_admin_user }}"
+    group: "{{ new_admin_user }}"
+    mode: "0644"
+  notify: Restart SSH
 
 - name: Install nvm
   shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
