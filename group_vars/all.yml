@@ -3,4 +3,4 @@
 new_admin_user: "bingo"
 
 domain: "bingops.com"
-react_app_clone_path: "/srv/portfolio"
+portfolio_clone_path: "/srv/portfolio"

@@ -1,2 +1,2 @@
-[host]
-ovh-vps ansible_host=54.37.51.156
+[web-servers]
+web ansible_host=192.168.1.120

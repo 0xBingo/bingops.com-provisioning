@@ -1,4 +1,8 @@
 ---
 
-react_app_repo_url: "https://github.com/Oslonline/bingo-portfolio.git"
-react_app_branch: "main"
+portfolio_repo_url: "https://github.com/Oslonline/bingo-portfolio.git"
+portfolio_branch: "main"
+
+portfolio_emailjs_service_id: "Gmail_portfolio"
+portfolio_emailjs_template_id: "template_1puw1na"
+portfolio_emailjs_public_key: "xYSscmGX_B3W6WcjC"

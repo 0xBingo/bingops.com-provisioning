@@ -10,11 +10,20 @@
 
 - name: Clone React app from GitHub
   git:
-    repo: "{{ react_app_repo_url }}"
-    dest: "{{ react_app_clone_path }}"
-    version: "{{ react_app_branch }}"
+    repo: "{{ portfolio_repo_url }}"
+    dest: "{{ portfolio_clone_path }}"
+    version: "{{ portfolio_branch }}"
     clone: yes
     update: yes
+    force: yes
+
+- name: "Deploy .env file"
+  template:
+    src: ".env.j2"
+    dest: "{{ portfolio_clone_path }}/.env"
+    owner: "{{ new_admin_user }}"
+    group: "{{ new_admin_user }}"
+    mode: "0644"
 
 - name: Install nvm
   shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
@@ -26,11 +35,11 @@
     npm install
     npm run build
   args:
-    chdir: "{{ react_app_clone_path }}"
+    chdir: "{{ portfolio_clone_path }}"
     executable: /bin/bash
 
 - name: Copy Build to Nginx directory
   copy:
-    src: "{{ react_app_clone_path }}/dist/"
+    src: "{{ portfolio_clone_path }}/dist/"
     dest: "/var/www/html/"
     remote_src: true
