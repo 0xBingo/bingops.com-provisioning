@@ -17,7 +17,7 @@
 
 - name: Deploy renew script
   template:
-    src: "sslcert-renew.sh.j2"
+    src: sslcert-renew.sh.j2
     dest: "/opt/letsencrypt/sslcert-renew.sh"
     mode: '0750'
 

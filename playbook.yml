@@ -1,9 +1,11 @@
 ---
-- hosts: ovh-vps
+- name: Setup web servers
+  hosts: web-servers
   become: yes
   remote_user: "{{ new_admin_user }}"
   roles:
     - ssh
+    - cloudflare
     - letsencrypt
     - nginx
     - portfolio

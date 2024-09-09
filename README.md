@@ -1,49 +1,103 @@
-# React Portfolio Deployment for bingops.com
+### BingOps Provisioning Project Documentation: `bingops.com-provisioning`
 
-This Ansible project automates the deployment of a React-based portfolio website on [bingops.com](https://www.bingops.com), made by [Oslo418](https://github.com/Oslonline/) opensource at [bingo-portfolio](https://github.com/Oslonline/bingo-portfolio) . It configures the server with Nginx, sets up SSL certificates using Let's Encrypt, and deploys the React application. Additionally, it ensures SSH access is properly configured for secure administration.
+This documentation outlines the essential components and tasks in the provisioning of the website **bingops.com** using Terraform, Proxmox, and Ansible. The project sets up a virtual machine (VM) on Proxmox, configures Cloudflare for tunneling, and deploys a React-based portfolio website with proper SSL certificates and secure SSH access.
 
-## Project Structure
+#### Project Skeleton
 
-- `bootstrap.yml`: Initial playbook to set up Ansible on the target server.
-- `playbook.yml`: Main playbook that runs the entire setup and deployment process.
-- `group_vars/all.yml`: Contains variables applicable to all hosts.
-- `inventories/main/hosts`: Inventory file for defining hosts and groups.
-- `roles/`: Contains Ansible roles for each task.
-- `letsencrypt`: Configures SSL certificates using Let's Encrypt.
-- `nginx`: Sets up and configures Nginx as a web server and reverse proxy.
-- `portfolio`: Deploys the React application.
-- `ssh`: Ensures SSH is properly configured for secure access.
+```plaintext
 
-## Prerequisites
+│ # Ansible
+├── roles/
+│   ├── cloudflare/    # Cloudflare tunnel setup
+│   ├── portfolio/     # React app deployment
+│   ├── ssh/           # SSH configuration and hardening
+│   ├── nginx/         # Nginx setup and reverse proxy
+│   └── letsencrypt/   # SSL certificate management
+├── group_vars/
+│   └── all.yml        # Global variables (e.g., domain, SSH users)
+├── inventories/
+│   └── main/hosts     # Ansible inventory for target servers
+├── playbook.yml       # Main playbook for provisioning tasks
+├── bootstrap.yml      # Initial Ansible playbook
+│
+│ # Terraform
+│
+├── main.tf                 # Proxmox provider setup
+├── vms.tf                  # VM provisioning on Proxmox
+├── terraform.tfvars        # Terraform variables file
+├── credentials.auto.tfvars # Proxmox credentials
+├── variables.tf            # Terraform variables definitions
+└── README.md               # Project documentation
+```
 
-- Ansible installed on your control machine.
-- A target server running a supported version of Linux.
-- Domain name `bingops.com` pointed to your server's IP address.
+### Key Steps Overview
 
-## Usage
+#### 1. **Proxmox VM Creation (Terraform)**
 
-1. **Prepare Inventory**: Update `inventories/main/hosts` with the IP address or hostname of your server.
+Terraform is used to create and manage the VM for `bingops.com`. It interacts with Proxmox via the `proxmox_virtual_environment_vm` resource.
 
-2. **Set Variables**: Customize variables in `group_vars/all.yml` and role-specific `defaults/main.yml` files as needed.
+- **VM Specs:**
+    - VM ID: `120`
+    - Cores: `2`
+    - Memory: `2GB`
+    - IP: `192.168.1.120/24`
+    - Network Bridge: `vmbr0`
 
-3. **Run Playbook**: Execute the main playbook to deploy the portfolio.
+- **Credentials Setup**:
+  The Proxmox API Token and SSH key are securely stored in the `credentials.auto.tfvars` file. This file is used to provide Terraform with access to the Proxmox server.
 
+  Here’s a sample `credentials.auto.tfvars` template you can use for your setup (make sure to replace the values with your own):
+
+  ```plaintext
+  proxmox_api_url   = "https://192.168.1.150:8006"  # Your Proxmox IP Address
+  proxmox_api_token = "terraform@pve!terraform=d3adbeef-1234-5678-9101-abcdefabcdef"  # Example API Token
+  
+  ssh_key = "ssh-rsa AAAAB3NzaC1yc..."
+  ```
+
+    - `proxmox_api_url`: The URL for accessing your Proxmox server, including the port (e.g., `8006`).
+    - `proxmox_api_token`: The API token you created in Proxmox to give Terraform access.
+    - `ssh_key`: Your SSH public key for accessing the VM.
+
+  This file should not be shared publicly as it contains sensitive information.
+
+#### 2. **Run Bootstrap Playbook**
+
+The `bootstrap.yml` playbook is used to prepare the target server (or VM) for Ansible management. This includes setting up users, SSH access, and ensuring essential packages are installed.
+
+- **Key Tasks in `bootstrap.yml`**:
+    - Ensure the `sudo` package is installed.
+    - Create a new administrative user with key-based SSH access.
+    - Configure SSH for secure connections (disabling password login, setting key-based authentication, etc.).
+
+**Command**:
+```bash
+ansible-playbook bootstrap.yml -i inventories/main/hosts
+```
+
+#### 3. **Deploy Applications**
+
+Once the target environment is ready, you can deploy the applications and configure Nginx, SSL certificates, and the React app.
+
+- **Key Tasks**:
+    - Update the `group_vars/all.yml` file with your domain and clone path.
+    - Run the full Ansible playbook to deploy the React app, configure Nginx, and set up SSL.
+
+**Command**:
 ```bash
 ansible-playbook -i inventories/main/hosts playbook.yml
 ```
 
-4. **Verify Deployment**: Access `https://bingops.com` to view the deployed React portfolio.
+#### 4. **Verify Deployment**
 
-## Role Details
+After running the playbooks, verify that the website is running and accessible via HTTPS.
 
-- **LetsEncrypt**: Automatically obtains and renews SSL certificates.
-- **Nginx**: Configures Nginx to serve the React app and handle HTTPS.
-- **Portfolio**: Clones the React app from a Git repository and builds it.
-- **SSH**: Hardens SSH access for improved security.
+- Access the portfolio site at `https://bingops.com`.
 
-## Credits
+---
 
-Thanks to **Oslo418**, here are its social links :
-- His website : [oslo418.com](https://www.oslo418.com/)
-- Github : [Oslonline](https://github.com/Oslonline)
-- Twitter : [Oslo418](https://twitter.com/Oslo418)
+### Final Notes
+
+- Ensure all sensitive information such as API tokens and SSH keys are stored securely in the `credentials.auto.tfvars` file.
+- All variables can be customized in `group_vars/all.yml` and the respective `defaults/main.yml` files under each role.
+- The project supports automatic SSL renewal and SSH access hardening for long-term security.

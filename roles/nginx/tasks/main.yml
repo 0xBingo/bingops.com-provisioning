@@ -1,11 +1,11 @@
 ---
 
-- name: Install certbot with nginx plugin
-  apt:
-    name:
-      - nginx
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
     state: present
     update_cache: yes
+
 
 - name: Enable default Nginx reverse proxy
   template:

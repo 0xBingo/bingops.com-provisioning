@@ -1,6 +1,6 @@
 ---
-- hosts: ovh-vps
+- hosts: web-servers
   become: yes
-  remote_user: debian
+  remote_user: ubuntu
   roles:
     - ssh
