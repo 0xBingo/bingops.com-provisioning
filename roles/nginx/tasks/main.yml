@@ -6,9 +6,8 @@
     state: present
     update_cache: yes
 
-
 - name: Enable default Nginx reverse proxy
-  template:
+  ansible.builtin.template:
     src: default.conf.j2
     dest: "/etc/nginx/sites-enabled/default"
     mode: "0644"

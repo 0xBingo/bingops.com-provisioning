@@ -1,16 +1,16 @@
 ---
 
 - name: Download cloudflared debian package
-  get_url:
-    url: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-    dest: /tmp/cloudflared.deb
+  ansible.builtin.get_url:
+    url: "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb"
+    dest: ""/tmp/cloudflared.deb"
 
 - name: Install cloudflared package
-  apt:
-    deb: /tmp/cloudflared.deb
+  ansible.builtin.apt:
+    deb: "/tmp/cloudflared.deb"
     state: present
 
 - name: Start tunnel service
-  command: "cloudflared service install {{ cloudflare_tunnel_token }}"
+  ansible.builtin.command: "cloudflared service install {{ cloudflare_tunnel_token }}"
   changed_when: false
   failed_when: false

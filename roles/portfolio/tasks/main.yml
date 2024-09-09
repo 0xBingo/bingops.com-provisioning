@@ -1,7 +1,7 @@
 ---
 
 - name: Install certbot with nginx plugin
-  apt:
+  ansible.builtin.apt:
     name:
       - nodejs
       - npm
@@ -9,7 +9,7 @@
     update_cache: yes
 
 - name: Clone React app from GitHub
-  git:
+  ansible.builtin.git:
     repo: "{{ portfolio_repo_url }}"
     dest: "{{ portfolio_clone_path }}"
     version: "{{ portfolio_branch }}"
@@ -18,7 +18,7 @@
     force: yes
 
 - name: "Deploy .env file"
-  template:
+  ansible.builtin.template:
     src: ".env.j2"
     dest: "{{ portfolio_clone_path }}/.env"
     owner: "{{ new_admin_user }}"
@@ -26,10 +26,10 @@
     mode: "0644"
 
 - name: Install nvm
-  shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
+  ansible.builtin.shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash"
 
 - name: Run build
-  shell: |
+  ansible.builtin.shell: |
     source $HOME/.nvm/nvm.sh
     nvm install v18.19.0
     npm install
@@ -39,7 +39,15 @@
     executable: /bin/bash
 
 - name: Copy Build to Nginx directory
-  copy:
+  ansible.builtin.copy:
     src: "{{ portfolio_clone_path }}/dist/"
     dest: "/var/www/html/"
     remote_src: true
+
+- name: Deploy robots.txt
+  ansible.builtin.template:
+    src: "robots.txt.j2"
+    dest: "/var/www/html/robots.txt"
+    owner: "{{ new_admin_user }}"
+    group: "{{ new_admin_user }}"
+    mode: "0644"
