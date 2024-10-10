@@ -1,11 +1,7 @@
 # Jetbrains
 .idea
 
-# Ansible
-roles/portfolio/templates/.env.j2
-
 # Terraform
 .terraform*
 terraform.tfstate*
 credentials.auto.tfvars
-.terraform.lock.hcl
