@@ -1,13 +1,5 @@
 ---
 
-- name: Install certbot with nginx plugin
-  ansible.builtin.apt:
-    name:
-      - nodejs
-      - npm
-    state: present
-    update_cache: yes
-
 - name: Clone React app from GitHub
   ansible.builtin.git:
     repo: "{{ portfolio_repo_url }}"
@@ -31,7 +23,7 @@
 - name: Run build
   ansible.builtin.shell: |
     source $HOME/.nvm/nvm.sh
-    nvm install v18.19.0
+    nvm install v20.17.0
     npm install
     npm run build
   args:
