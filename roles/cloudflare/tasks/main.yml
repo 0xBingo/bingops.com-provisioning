@@ -3,7 +3,7 @@
 - name: Download cloudflared debian package
   ansible.builtin.get_url:
     url: "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb"
-    dest: ""/tmp/cloudflared.deb"
+    dest: "/tmp/cloudflared.deb"
 
 - name: Install cloudflared package
   ansible.builtin.apt:
